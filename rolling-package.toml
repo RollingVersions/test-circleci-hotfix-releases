@@ -1,0 +1,8 @@
+name = "client"
+
+dependencies = []
+
+[scripts]
+  prepublish = "echo prepublish $NEW_VERSION"
+  publish_dry_run = "echo dryrun $NEW_VERSION"
+  publish = "echo publish $NEW_VERSION"

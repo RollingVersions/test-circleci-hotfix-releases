@@ -1,0 +1,103 @@
+version: 2.1
+
+workflows:
+  pull_request:
+    jobs:
+      - publish-canary-approval:
+          type: approval
+          filters:
+            branches:
+              ignore: main
+
+      - publish-canary-pr:
+          requires:
+            - publish-canary-approval
+          filters:
+            branches:
+              ignore: main
+  release:
+    jobs:
+      - publish-canary:
+          filters:
+            branches:
+              only: main
+
+      - publish-approval:
+          type: approval
+          requires:
+            - publish-canary
+
+      - publish:
+          requires:
+            - publish-approval
+          filters:
+            branches:
+              only: main
+
+  hotfix:
+    jobs:
+      - publish-canary:
+          filters:
+            branches:
+              only: hotfix/*
+
+      - publish-approval:
+          type: approval
+          requires:
+            - publish-canary
+
+      - publish:
+          requires:
+            - publish-approval
+          filters:
+            branches:
+              only: hotfix/*
+
+jobs:
+  publish-canary-pr:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - setup
+      - publish_canary_pr
+
+  publish-canary:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - setup
+      - publish_canary
+
+  publish:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - setup
+      - publish
+
+commands:
+  setup:
+    description: 'Checkout and install dependencies'
+    steps:
+      - checkout
+      - run:
+          name: Versions
+          command: node -v && npm -v && yarn -v
+
+  publish_canary_pr:
+    steps:
+      - run:
+          name: Release
+          command: npx rollingversions@canary publish --backend "https://staging.rollingversions.com" --canary $CIRCLE_BUILD_NUM --deploy-branch ${CIRCLE_BRANCH}
+
+  publish_canary:
+    steps:
+      - run:
+          name: Release
+          command: npx rollingversions@canary publish --backend "https://staging.rollingversions.com" --canary $CIRCLE_BUILD_NUM --deploy-branch ${CIRCLE_BRANCH}
+
+  publish:
+    steps:
+      - run:
+          name: Release
+          command: npx rollingversions@canary publish --backend "https://staging.rollingversions.com" --deploy-branch ${CIRCLE_BRANCH}
