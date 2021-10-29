@@ -1,0 +1,1 @@
+A regular bug fix to v2.0.0, to be released as v2.0.1
