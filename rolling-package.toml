@@ -6,35 +6,48 @@ base_version = [1, 0, 0, 0]
 tag_format = "client@{{MAJOR}}.{{MINOR}}.{{PATCH}}{{?-{{HOTFIX}}}}"
 version_schema = ["MAJOR", "MINOR", "PATCH", "HOTFIX"]
 
-[[change_types]]
-  id = "breaking"
-  bumps = "MAJOR"
-  plural = "Breaking Changes"
+# Versioning mode differs between hotfix branches and
+# the main branch
 
-[[change_types]]
-  id = "feat"
-  bumps = "MINOR"
-  plural = "New Features"
+  [[versioning_mode]]
+    branch = "main"
+    mode = "ALWAYS_INCREASING"
 
-[[change_types]]
-  id = "refactor"
-  bumps = "MINOR"
-  plural = "Refactors"
+  [[versioning_mode]]
+    branch = "hotfix/*"
+    mode = "BY_BRANCH"
 
-[[change_types]]
-  id = "fix"
-  bumps = "PATCH"
-  plural = "Bug Fixes"
+# We add a custom "hotfix" change type
 
-[[change_types]]
-  id = "perf"
-  bumps = "PATCH"
-  plural = "Performance Improvements"
+  [[change_types]]
+    id = "breaking"
+    bumps = "MAJOR"
+    plural = "Breaking Changes"
 
-[[change_types]]
-  id = "hotfix"
-  bumps = "HOTFIX"
-  plural = "Hotfixes"
+  [[change_types]]
+    id = "feat"
+    bumps = "MINOR"
+    plural = "New Features"
+
+  [[change_types]]
+    id = "refactor"
+    bumps = "MINOR"
+    plural = "Refactors"
+
+  [[change_types]]
+    id = "fix"
+    bumps = "PATCH"
+    plural = "Bug Fixes"
+
+  [[change_types]]
+    id = "perf"
+    bumps = "PATCH"
+    plural = "Performance Improvements"
+
+  [[change_types]]
+    id = "hotfix"
+    bumps = "HOTFIX"
+    plural = "Hotfixes"
 
 [scripts]
   prepublish = "echo prepublish $NEW_VERSION"
