@@ -3,7 +3,7 @@ name = "client"
 dependencies = []
 
 base_version = [1, 0, 0, 0]
-tag_format = "client@{{MAJOR}}.{{MINOR}}.{{PATCH}}"
+tag_format = "client@{{MAJOR}}.{{MINOR}}.{{PATCH}}-{{HOTFIX}}"
 version_schema = ["MAJOR", "MINOR", "PATCH", "HOTFIX"]
 
 [[change_types]]
