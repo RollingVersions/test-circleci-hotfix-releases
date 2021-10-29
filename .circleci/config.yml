@@ -7,14 +7,18 @@ workflows:
           type: approval
           filters:
             branches:
-              ignore: main
+              ignore:
+                - main
+                - /hotfix\/.*/
 
       - publish-canary-pr:
           requires:
             - publish-canary-approval
           filters:
             branches:
-              ignore: main
+              ignore:
+                - main
+                - /hotfix\/.*/
   release:
     jobs:
       - publish-canary:
@@ -39,7 +43,7 @@ workflows:
       - publish-canary:
           filters:
             branches:
-              only: hotfix/*
+              only: /hotfix\/.*/
 
       - publish-approval:
           type: approval
@@ -51,7 +55,7 @@ workflows:
             - publish-approval
           filters:
             branches:
-              only: hotfix/*
+              only: /hotfix\/.*/
 
 jobs:
   publish-canary-pr:
